@@ -5,7 +5,11 @@
 package it.polito.tdp.corsi;
 
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+
+import it.polito.tdp.corsi.model.Corso;
 import it.polito.tdp.corsi.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -47,10 +51,73 @@ public class FXMLController {
     @FXML
     void corsiPerPeriodo(ActionEvent event) {
     	
+    	if(txtPeriodo.getText()==null) {
+
+    		txtRisultato.setText("Devi inserire 1 o 2 per il periodo didattico");
+    	return;
+    	}
+    	
+    	String periodoStringa = txtPeriodo.getText();
+    	Integer periodo = 0;
+    	try {
+    		periodo = Integer.parseInt(periodoStringa);
+    	}catch(NumberFormatException ne) {
+    		txtRisultato.setText("Devi inserire 1 o 2 per il periodo didattico");
+    		return;
+    	}catch (NullPointerException npe) {
+    		txtRisultato.setText("Devi inserire 1 o 2 per il periodo didattico");
+    		return;
+    	}
+    	
+    	if(periodo<1 || periodo>2) {
+    		txtRisultato.setText("Devi inserire 1 o 2 per il periodo didattico");
+    		return;
+    	}
+    	//chiamo il metodo del model
+    	List<Corso> corsi = this.model.getCorsiByPeriodo(periodo);
+    	
+    	//li stampo
+    	for (Corso c : corsi) {
+    		txtRisultato.appendText(c.toString()+"\n");
+    	}
     }
 
     @FXML
     void numeroStudenti(ActionEvent event) {
+    	
+    	if(txtPeriodo.getText()==null) {
+
+    		txtRisultato.setText("Devi inserire 1 o 2 per il periodo didattico");
+    	return;
+    	}
+    	
+    	String periodoStringa = txtPeriodo.getText();
+    	Integer periodo = 0;
+    	try {
+    		periodo = Integer.parseInt(periodoStringa);
+    	}catch(NumberFormatException ne) {
+    		txtRisultato.setText("Devi inserire 1 o 2 per il periodo didattico");
+    		return;
+    	}catch (NullPointerException npe) {
+    		txtRisultato.setText("Devi inserire 1 o 2 per il periodo didattico");
+    		return;
+    	}
+    	
+    	if(periodo<1 || periodo>2) {
+    		txtRisultato.setText("Devi inserire 1 o 2 per il periodo didattico");
+    		return;
+    	}
+    	//chiamo il metodo del model
+    	Map<Corso,Integer> corsiIscrizioni = this.model.getIscrittiByPeriodo(periodo);
+    	
+    	//li stampo
+    	for (Corso c : corsiIscrizioni.keySet()) {
+    		txtRisultato.appendText(c.toString()+"\n");
+    		Integer n=corsiIscrizioni.get(c);
+    		txtRisultato.appendText("\t"+n+"\n");
+    	}
+    	
+    	
     	
     }
 
@@ -80,5 +147,6 @@ public class FXMLController {
     	this.model = model;
     }
     
+   
     
 }
